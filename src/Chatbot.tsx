@@ -79,9 +79,11 @@ const Chatbot: React.FC = () => {
   }
 
   useEffect(() => {
-    if (chatRef.current != null) {
-      const last = chatRef.current.querySelector("#scroll-to-anchor")
-      chatRef.current.scrollTo(0, (last?.scrollHeight ?? chatRef.current.scrollHeight) - 16)
+    if (chatRef.current !== null) {
+      const anchor = chatRef.current.querySelector("#scroll-to-anchor")
+      const height = anchor?.clientHeight ?? 0
+      console.log("scroll bottom", anchor?.clientHeight ?? 0)
+      chatRef.current.scrollTo({ top: chatRef.current.scrollHeight - height - height / 2, behavior: "smooth" })
     }
   }, [messages])
 
@@ -92,7 +94,7 @@ const Chatbot: React.FC = () => {
           const isBotMessage = message.role === "assistant"
           return (
             <div
-              id={!isBotMessage && messages.length - 1 === index ? "scroll-to-anchor" : ""}
+              id={isBotMessage && messages.length - 1 === index ? "scroll-to-anchor" : undefined}
               key={index}
               className={`chat-bubble ${isBotMessage ? "chat-bubble-bot" : "chat-bubble-user"}`}
             >
